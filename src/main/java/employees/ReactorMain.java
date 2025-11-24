@@ -54,9 +54,6 @@ public class ReactorMain {
                         e -> e.getAgeAt(1969)
                 ).subscribe(System.out::println);
 
-        //Még ide is eljutunk
-        System.out.println("This is the end, my only friend!");
-
         //onErrorReturn -> explicit értrék visszaadása hiba esetén
         Mono.just(new Employee("John Doe", 1970))
                 .map(
@@ -82,5 +79,46 @@ public class ReactorMain {
                 .doOnError(Throwable::printStackTrace)
                 .onErrorReturn(0)
                 .subscribe(System.out::println);
+        //Hogyan lehetne a feldolgozás megszakadása nélkül kezelni a hibát?
+        //Kell tudni azt, hogy mi az a flatmap
+        //flatMap az elemekből 0..1..N elemet készít, kiterít azokat egy stream-be
+        System.out.println("FlatMap usage");
+        Flux.just(new Employee("John Doe", 1970), new Employee("Jane Doe", 1970))
+                .map(
+                        e -> e.getAgeAt(1969)
+                )
+                .doOnError(Throwable::printStackTrace)
+                .onErrorReturn(0)
+                .subscribe(System.out::println);
+
+        Employee emp = new Employee("John Doe", 1970);
+        System.out.println(emp.getNameCharacters());
+
+        Flux.just(
+                new Employee("John Doe", 1970),
+                new Employee("Jane Doe", 1970)
+        )
+                .flatMap(
+                        e -> Flux.fromIterable(e.getNameCharacters())//collection-to-Flux
+                )
+                .subscribe(System.out::println);
+
+        //Try catch helyett flatmapelünk lefelé
+        System.out.println("Error handling with flatMap:");
+        Flux.just(
+                        new Employee("John Doe", 1980),
+                        new Employee("Jane Doe", 1970)
+                )
+                .flatMap(
+                        e -> Mono
+                                .just(e)
+                                .map( inner -> inner.getAgeAt(1975))//exception for the first
+                                .onErrorResume(t -> Mono.empty())
+                )
+                .subscribe(System.out::println);
+
+        //<===========================>
+        //Még ide is eljutunk
+        System.out.println("This is the end, my only friend!");
     }
 }
