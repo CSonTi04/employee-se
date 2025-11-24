@@ -42,5 +42,19 @@ public class ReactorMain {
                 .filter(
                         employee -> employee.getAgeAt() > 1982
                 ).singleOrEmpty().subscribe(System.out::println);
+
+        //Hibakezelás
+        Mono.just(new Employee("John Doe", 1970))
+                .map(
+                        e -> e.getAgeAt(2000)
+                ).subscribe(System.out::println);
+
+        Mono.just(new Employee("John Doe", 1970))
+                .map(
+                        e -> e.getAgeAt(1969)
+                ).subscribe(System.out::println);
+
+        //Még ide is eljutunk
+        System.out.println("This is the end, my only friend!");
     }
 }
