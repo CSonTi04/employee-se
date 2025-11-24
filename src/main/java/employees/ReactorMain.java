@@ -8,7 +8,11 @@ public class ReactorMain {
         //Stream.of(new Employee("John", 1980))
 
         //Non blocking backpressure -  nem árasztjuk el a fogyasztót
-        Flux.just(new Employee("John", 1980))
+        Flux.just(new Employee("John", 1980), new Employee("Jane", 1990))
+                .filter(
+                        employee -> employee.getAgeAt() > 1982
+                )
+                .map(Employee::name)
                 .subscribe(
                         System.out::println
                 );
