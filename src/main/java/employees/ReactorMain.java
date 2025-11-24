@@ -38,6 +38,7 @@ public class ReactorMain {
 
         //Mono -> Flux és Flux -> Mono is működik
         //Értelemszerűen ha több elem van akkor a Mono hibát dob
+        //Futtatás nem állna meg, csak a stream lenne korrupt -> onErrorDropeed -> hibakezelés is callbback-ekkel megy
         Flux.just(new Employee("John", 1980), new Employee("Jane", 1990))
                 .filter(
                         employee -> employee.getAgeAt() > 1982
