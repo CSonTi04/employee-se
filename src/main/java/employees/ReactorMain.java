@@ -16,5 +16,16 @@ public class ReactorMain {
                 .subscribe(
                         System.out::println
                 );
+
+
+        //Elemek bevárása lehetséges a block(Mono) vagy blockFirst/blockLast(Flux) metódussal
+        //Ez már blokkoló programozás
+        Flux.just(new Employee("John", 1980), new Employee("Jane", 1990))
+                .filter(
+                        employee -> employee.getAgeAt() > 1982
+                )
+                .map(Employee::name)
+                //Ezt sose használjuk, pl Spring alkalmazásban kivételt dob
+                .blockFirst();
     }
 }
