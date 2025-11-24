@@ -56,5 +56,23 @@ public class ReactorMain {
 
         //Még ide is eljutunk
         System.out.println("This is the end, my only friend!");
+
+        //onErrorReturn -> explicit értrék visszaadása hiba esetén
+        Mono.just(new Employee("John Doe", 1970))
+                .map(
+                        e -> e.getAgeAt(1969)
+                )
+                .onErrorReturn(0)
+                .subscribe(System.out::println);
+
+        //Sorernd számít, úgy találjuk ki mint egy futószallag
+        Mono.just(new Employee("John Doe", 1970))
+                .map(
+                        e -> e.getAgeAt(1969)
+                )
+                .doOnError(Throwable::printStackTrace)
+                .onErrorReturn(0)
+                .subscribe(System.out::println);
+        //onErrorResume -> másik Mono/Flux visszaadása hiba esetén
     }
 }
