@@ -74,5 +74,13 @@ public class ReactorMain {
                 .onErrorReturn(0)
                 .subscribe(System.out::println);
         //onErrorResume -> másik Mono/Flux visszaadása hiba esetén
+        //Itt már a stream feldolgozás megszakad, nem folytatódik a következő elemmel
+        Flux.just(new Employee("John Doe", 1970), new Employee("Jane Doe", 1970))
+                .map(
+                        e -> e.getAgeAt(1969)
+                )
+                .doOnError(Throwable::printStackTrace)
+                .onErrorReturn(0)
+                .subscribe(System.out::println);
     }
 }
